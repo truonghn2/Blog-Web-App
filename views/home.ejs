@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Home</title>
+</head>
+<body>
+    <header>
+        <h1>The Blog Site</h1>
+    </header>
+    <main>
+        <button>
+            <a href="/post/new">Create New Post</a>
+        </button>
+        
+        <%# if posts array is empty%>
+        <% if(posts.length === 0) { %>
+            <p>No posts yet. Click the button above to create a new post!</p>
+        <% } else { %>
+            <%# iterate through each post in the array and create the html element %>
+            <% posts.forEach(post => { %>
+                <div>
+                <article id="post-<%= post.id %>">
+                    <h2 contenteditable="true"><%= post.title %></h2>
+                    <%# output content of the current post %>
+                    <p contenteditable="true"><%= post.content %></p>
+
+                    <button onclick="savePost(<%= post.id %>)">Save Changes</button>
+                    <button onclick="hidePost(<%= post.id %>)">Delete</button>
+
+                </article>
+                </div>
+            <% }) %>
+        <% } %>
+    </main>
+
+    <script>
+        //function to save changes to the post
+        function savePost(postId) {
+            const postElement = document.getElementById(`post-${postId}`);
+            const newTitle = postElement.$('h2'); //jQuery does the same as postElement.querySelector('h2').innerText
+            const newContent = postElement.querySelector('p').innerText;
+            
+            //save the edited content in memory (just for this session)
+            console.log(`Post ${postId} saved with new title and content:`, { title: newTitle, content: newContent });
+
+            //alert the user that the changes were saved
+            alert('Changes saved!');
+        }
+
+        //function to hide (delete) the post from the user
+        function hidePost(postId) {
+            const postElement = document.getElementById(`post-${postId}`);
+            if (postElement) {
+                postElement.style.display = 'none'; //hide the post from the user
+            }
+        }
+    </script>
+</body>
+</html>
